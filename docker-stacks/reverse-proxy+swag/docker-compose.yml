@@ -1,0 +1,72 @@
+services:
+  crowdsec:
+    image: docker.io/crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    environment:
+      - GID=1000
+      - COLLECTIONS=crowdsecurity/nginx crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules crowdsecurity/appsec-crs crowdsecurity/base-http-scenarios
+      - CUSTOM_HOSTNAME=homelab
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /media/cert/config/log/nginx:/var/log/nginx
+      - /mnt/emby_logs:/var/log/emby:ro
+      - ./crowdsec/crowdsec-db:/var/lib/crowdsec/data/
+      - ./crowdsec/crowdsec-config:/etc/crowdsec/
+    networks:
+      - crowdsec
+    ports:
+      - 8081:8080
+      - 7422:7422
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    hostname: swag-proxy
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - crowdsec
+    depends_on:
+      - crowdsec
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+      - URL=example.com #masked domain
+      - SUBDOMAINS=wildcard
+      - VALIDATION=dns
+      - DNSPLUGIN=cloudflare
+      - DOCKER_MODS=linuxserver/mods:swag-crowdsec|linuxserver/mods:swag-maxmind
+      # API keys worden ingeladen via het .env bestand
+      - CROWDSEC_API_KEY=${CROWDSEC_API}
+      - CROWDSEC_LAPI_URL=http://crowdsec:8080
+      - CROWDSEC_APPSEC_ENABLED=true
+      - CROWDSEC_APPSEC_URL=http://crowdsec:7422
+      - CROWDSEC_APPSEC_FAILURE_ACTION=drop
+      - MAXMINDDB_LICENSE_KEY=${MAXMIND_KEY}
+      - MAXMINDDB_USER_ID=${MAXMIND_USER}
+      - dns-cloudflare-propagation-seconds=20
+    volumes:
+      - /media/cert/config:/config
+      - ./crowdsec/nginx-real-ip.conf:/config/nginx/site-confs/real-ip-fix.conf
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+
+  cf-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared_tunnel
+    networks:
+      - crowdsec
+    restart: unless-stopped
+    environment:
+      # Cloudflare tunnel token ingeladen via .env
+      - TUNNEL_TOKEN=${TOKEN}
+    command: tunnel --no-autoupdate run
+
+networks:
+  crowdsec:
