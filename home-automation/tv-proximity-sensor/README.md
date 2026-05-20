@@ -14,7 +14,7 @@ Het doel was tweeledig:
 ---
 
 ## Demo
-![Demo van de Auto-Pause functionaliteit](https://youtu.be/AO_Pd3kCA3k)
+[![Demo van de Auto-Pause functionaliteit](https://img.youtube.com/vi/AO_Pd3kCA3k/0.jpg)](https://youtu.be/AO_Pd3kCA3k)
 
 ---
 
