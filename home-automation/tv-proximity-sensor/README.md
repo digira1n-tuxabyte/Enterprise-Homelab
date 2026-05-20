@@ -14,7 +14,7 @@ Het doel was tweeledig:
 ---
 
 ## Demo
-![Demo van de Auto-Pause functionaliteit](assets/tv-proximity-sensor_demo.mp4)
+![Demo van de Auto-Pause functionaliteit](https://youtu.be/AO_Pd3kCA3k)
 
 ---
 
