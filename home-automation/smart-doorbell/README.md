@@ -2,7 +2,7 @@
 
 Dit project is een modificatie van een traditionele 'domme' deurbel naar een slim IoT-apparaat, direct geïntegreerd in Home Assistant. Het fungeert als de brug tussen een analoog stroomcircuit en het digitale netwerk.
 
-Dit project bouwt voort op de bekende hardware-architectuur uit [de tutorial van Frenck](https://frenck.dev/diy-smart-doorbell-for-just-2-dollar/), maar de ESPHome-code is specifiek herschreven en geoptimaliseerd voor **mechanische deurbellen**.
+Dit project bouwt voort op de bekende hardware-architectuur uit [de tutorial van Franck Nijhof](https://frenck.dev/diy-smart-doorbell-for-just-2-dollar/), maar de ESPHome-code is specifiek herschreven en geoptimaliseerd voor **mechanische deurbellen**.
 
 ---
 
