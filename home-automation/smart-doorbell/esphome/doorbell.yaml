@@ -1,0 +1,117 @@
+esphome:
+  name: doorbell
+esp8266:
+  board: esp01_1m
+
+# WiFi connection
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  min_auth_mode: WPA2
+  
+  # Fallback hotspot in case WiFi drops
+  ap:
+    ssid: "Deurbel"
+    password: "UqDUwq9jreFO4P" 
+
+# Enable captive portal for the fallback hotspot
+captive_portal:
+
+# Enable logging.
+logger:
+
+# Enable Home Assistant API.
+api:
+
+# Enable over-the-air updates.
+ota:
+  - platform: esphome
+
+# Enable Web server.
+web_server:
+  port: 80
+
+# Sync time with Home Assistant.
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Text sensors with general information.
+text_sensor:
+  - platform: version
+    name: Doorbell ESPHome Version
+  - platform: wifi_info
+    ip_address:
+      name: Doorbell IP
+    ssid:
+      name: Doorbell SSID
+    bssid:
+      name: Doorbell BSSID
+
+# Sensors with general information.
+sensor:
+  - platform: uptime
+    name: Doorbell Uptime
+  - platform: wifi_signal
+    name: Doorbell WiFi Signal
+    update_interval: 60s
+
+# Global to store the on/off state of the chime
+globals:
+  - id: chime
+    type: bool
+    restore_value: true
+    initial_value: 'true'
+
+# Exposed switches.
+switch:
+  - platform: restart
+    name: Doorbell Restart
+
+  - platform: gpio
+    id: relay
+    name: Doorbell Chime
+    pin:
+      inverted: true
+      number: GPIO0
+      mode:
+        output: true
+        open_drain: true
+
+  - platform: template
+    name: Doorbell Chime Active
+    id: chime_active
+    restore_mode: DISABLED
+    turn_on_action:
+      - globals.set:
+          id: chime
+          value: 'true'
+    turn_off_action:
+      - globals.set:
+          id: chime
+          value: 'false'
+    lambda: |-
+      return id(chime);
+
+# Binary sensor representing the Doorbell button push.
+binary_sensor:
+  - platform: gpio
+    id: button
+    name: Doorbell Button
+    pin:
+      number: GPIO2
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on: 25ms
+      - delayed_off: 25ms
+    on_press:
+      # Fire the relay for a guaranteed duration for a full mechanical chime
+      then:
+        if:
+          condition:
+            - switch.is_on: chime_active
+          then:
+            - switch.turn_on: relay
+            - delay: 500ms  # <-- ADJUST THIS IF NEEDED
+            - switch.turn_off: relay
