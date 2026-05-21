@@ -17,6 +17,8 @@ Hieronder vind je de navigatie naar de specifieke onderdelen van de infrastructu
     * **[`vps-monitoring/`](./docker-stacks/vps-monitoring/README.md)**: Bevat `docker commands`, Cloudflare Tunnels en monitoring tool UptimeKuma.
 * **[` home-automation`](./home-automation/)**
     * **[`tv-proximity-sensor/`](./home-automation/tv-proximity-sensor/)**: Een tastbare IoT-integratie. Toont het gebruik van actieve 24GHz mmWave radar (ESPHome) en geavanceerde Node-RED logica voor dynamische API-aansturing van media-apparatuur.
+    * **[`DIY Smart Doorbell (Analog to Digital)/`](./home-automation/smart-doorbell/)**: modificatie van een traditionele 'domme' deurbel naar een slim IoT-apparaat, direct geïntegreerd in Home Assistant. Het fungeert als de brug tussen een analoog stroomcircuit en het digitale netwerk.
+      
 
 ---
 
