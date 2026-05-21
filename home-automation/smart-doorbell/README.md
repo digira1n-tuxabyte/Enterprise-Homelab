@@ -70,7 +70,7 @@ on\_press:
 
 &#x20;       - switch.turn\_off: relay
 
-'''
+```
 
 \## 2. GPIO Open-Drain Configuratie
 Het gebruikte ESP-01 relaisbordje luistert soms nauw qua voltages. Om zwevende statussen ("floating pins") en ongewenst rammelen van het relais te voorkomen, is de relais-pin expliciet geconfigureerd met open_drain: true.
