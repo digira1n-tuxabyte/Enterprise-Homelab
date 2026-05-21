@@ -42,10 +42,10 @@ Het gebruikte ESP-01 relaisbordje luistert soms nauw qua voltages. Om zwevende s
 ### 3. Netwerk Redundantie
 Omdat een deurbel een kritiek onderdeel is van de woning, heb ik een fallback Wi-Fi hotspot en Captive Portal geconfigureerd. Mocht de OPNsense router onverhoopt uitvallen, zendt de deurbel zijn eigen "Deurbel" netwerk uit, zodat beheer en updates mogelijk blijven zonder de fysieke behuizing te moeten demonteren.
 
-De "Chime Active" Vlag
+### De "Chime Active" Vlag
 Net als in de tutorial, is er een globale Boolean variabele (chime_active) geconfigureerd. Dit creëert een virtuele schakelaar in Home Assistant waarmee de fysieke gong softwarematig kan worden uitgezet (bijvoorbeeld als de baby slaapt). De deurbelknop registreert dan nog steeds de beweging en stuurt een push-notificatie naar mijn telefoon, maar het relais naar de gong wordt geblokkeerd.
 
-De Automatisering (Node-RED Logica)
+### De Automatisering (Node-RED Logica)
 Naast de hardware-aansturing op de ESP-01, wordt het drukken op de deurbel via Home Assistant afgevangen in Node-RED. Dit triggert een flow met de volgende logica:
 
 Rate Limiting (Anti-Spam): Een delay-node beperkt de input tot maximaal 1 trigger per 30 seconden. Dit voorkomt audio-spam wanneer iemand de knop herhaaldelijk indrukt.
